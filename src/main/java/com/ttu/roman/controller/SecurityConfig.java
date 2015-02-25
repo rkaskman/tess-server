@@ -1,5 +1,6 @@
 package com.ttu.roman.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private GoogleUserInfoProvider googleUserInfoProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -50,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationProvider tokenAuthenticationProvider() {
-        return new TokenAuthenticationProvider(tokenService());
+        return new TokenAuthenticationProvider(googleUserInfoProvider);
     }
 
     @Bean

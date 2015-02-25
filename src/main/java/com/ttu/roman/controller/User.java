@@ -1,7 +1,6 @@
 package com.ttu.roman.controller;
 
 public class User {
-
     private Long userId;
     private String googleUserId;
     private String displayName;

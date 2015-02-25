@@ -1,8 +1,6 @@
 package com.ttu.roman.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.ttu.roman.util.Config;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -101,6 +100,7 @@ public class GoogleUserInfoProvider {
                         break;
                     case "expires_in":
                         tokenInfo.setExpiresIn(in.nextLong());
+                        break;
                     default:
                         in.nextString();
                 }
@@ -110,28 +110,13 @@ public class GoogleUserInfoProvider {
         }
     }
 
-    static class UserInfoAdapter extends TypeAdapter<User> {
+    static class UserInfoAdapter implements com.google.gson.JsonDeserializer<User> {
         @Override
-        public void write(JsonWriter jsonWriter, User user) throws IOException {
-        }
-
-        @Override
-        public User read(JsonReader in) throws IOException {
+        public User deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             User user = new User();
-            in.beginObject();
-
-            while (in.hasNext()) {
-                switch (in.nextName()) {
-                    case "id":
-                        user.setGoogleUserId(in.nextString());
-                        break;
-                    case "displayName":
-                        user.setDisplayName(in.nextString());
-                        break;
-                    default:
-                        in.nextString();
-                }
-            }
+            JsonObject object = jsonElement.getAsJsonObject();
+            user.setGoogleUserId(object.get("id").getAsString());
+            user.setDisplayName(object.get("displayName").getAsString());
             return user;
         }
     }

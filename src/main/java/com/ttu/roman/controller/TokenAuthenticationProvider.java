@@ -1,6 +1,5 @@
 package com.ttu.roman.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,12 +13,10 @@ import java.net.URISyntaxException;
 
 public class TokenAuthenticationProvider implements AuthenticationProvider {
 
-    private TokenService tokenService;
-    @Autowired
     private GoogleUserInfoProvider googleUserInfoProvider;
 
-    public TokenAuthenticationProvider(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public TokenAuthenticationProvider(GoogleUserInfoProvider googleUserInfoProvider) {
+        this.googleUserInfoProvider = googleUserInfoProvider;
     }
 
     @Override
