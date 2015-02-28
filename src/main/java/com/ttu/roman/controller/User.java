@@ -4,6 +4,7 @@ public class User {
     private Long userId;
     private String googleUserId;
     private String displayName;
+    private TokenInfo tokenInfo;
 
     public Long getUserId() {
         return userId;
@@ -27,5 +28,13 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public TokenInfo getTokenInfo() {
+        return tokenInfo;
+    }
+
+    public void setTokenInfo(TokenInfo tokenInfo) {
+        this.tokenInfo = tokenInfo;
     }
 }

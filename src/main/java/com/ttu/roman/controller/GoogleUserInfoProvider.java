@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.ttu.roman.util.Config;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 @Component
 public class GoogleUserInfoProvider {
@@ -61,7 +63,9 @@ public class GoogleUserInfoProvider {
         HttpGet httpGet = new HttpGet(userInfoUri);
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             String userInfoJson = EntityUtils.toString(response.getEntity(), "UTF-8");
-            return gson.fromJson(userInfoJson, User.class);
+            User user = gson.fromJson(userInfoJson, User.class);
+            user.setTokenInfo(tokenInfo);
+            return user;
         }
     }
 
@@ -99,7 +103,9 @@ public class GoogleUserInfoProvider {
                         tokenInfo.setAudience(in.nextString());
                         break;
                     case "expires_in":
-                        tokenInfo.setExpiresIn(in.nextLong());
+                        int expiresIn = in.nextInt();
+                        Date expiryTime = DateUtils.addSeconds(new Date(), expiresIn);
+                        tokenInfo.setExpiresIn(expiryTime);
                         break;
                     default:
                         in.nextString();

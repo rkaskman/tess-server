@@ -1,17 +1,18 @@
 package com.ttu.roman.controller;
 
-public class TokenInfo {
+import java.util.Date;
 
+public class TokenInfo {
     String userId;
     String audience;
-    Long expiresIn;
+    Date expiryTime;
 
-    public Long getExpiresIn() {
-        return expiresIn;
+    public Date getExpiresIn() {
+        return expiryTime;
     }
 
-    public void setExpiresIn(Long expiresIn) {
-        this.expiresIn = expiresIn;
+    public void setExpiresIn(Date expiryTime) {
+        this.expiryTime = expiryTime;
     }
 
     public String getAudience() {
