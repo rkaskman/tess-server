@@ -10,8 +10,9 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
 
 
 public class AuthenticationFilter extends GenericFilterBean {
@@ -27,17 +28,16 @@ public class AuthenticationFilter extends GenericFilterBean {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
 
-        if (authentication != null) {
-            User user = (User) authentication.getPrincipal();
-            Date expiresIn = user.getTokenInfo().getExpiresIn();
-            if (expiresIn.after(new Date())) {
-                SecurityContextHolder.clearContext();
-            } else {
-                return;
-            }
+        if (authentication == null) {
+            authenticate(request);
         }
+        HttpServletResponse httpResponse = cast(response);
+        HttpServletRequest httpRequest = cast(request);
 
-        authenticate(request);
+        long maxInactiveIntervalInMs = httpRequest.getSession().getMaxInactiveInterval() * 1000;
+
+        httpResponse.setHeader("expiresAt", String.valueOf(maxInactiveIntervalInMs));
+        filterChain.doFilter(request, response);
     }
 
     private void authenticate(ServletRequest request) {
@@ -67,7 +67,7 @@ public class AuthenticationFilter extends GenericFilterBean {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T cast(ServletRequest request) {
-        return (T) request;
+    private static  <T> T cast(Object o) {
+        return (T) o;
     }
 }
