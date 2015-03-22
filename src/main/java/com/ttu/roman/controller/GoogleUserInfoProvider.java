@@ -13,6 +13,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -49,7 +50,15 @@ public class GoogleUserInfoProvider {
 
     public User getUserBy(String token) throws URISyntaxException, IOException {
         TokenInfo tokenInfo = getTokenInfo(token);
+        verifyAudience(tokenInfo.audience);
+
         return getUser(tokenInfo);
+    }
+
+    private void verifyAudience(String audience) {
+        if(!config.getGoogleClientId().equals(audience)) {
+            throw new InternalAuthenticationServiceException("Invalid target application for token");
+        }
     }
 
     private User getUser(TokenInfo tokenInfo) throws URISyntaxException, IOException {

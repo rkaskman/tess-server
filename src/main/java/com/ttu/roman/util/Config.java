@@ -11,6 +11,8 @@ public class Config {
     private String businessRegisterURL;
     @Value("${googleAPIKey}")
     private String googleAPIKey;
+    @Value("${googleClientId}")
+    private String googleClientId;
 
     public String getBusinessRegisterURL() {
         return businessRegisterURL;
@@ -18,5 +20,9 @@ public class Config {
 
     public String getGoogleAPIKey() {
         return googleAPIKey;
+    }
+
+    public String getGoogleClientId() {
+        return googleClientId;
     }
 }
