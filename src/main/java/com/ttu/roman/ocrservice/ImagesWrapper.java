@@ -6,6 +6,6 @@ public class ImagesWrapper {
 
     public static class ImageWrapper {
         public String encodedImage;
-        public String fileName;
+        public String fileExtension;
     }
 }

@@ -1,18 +1,9 @@
 package com.ttu.roman.controller;
 
 public class User {
-    private Long userId;
     private String googleUserId;
     private String displayName;
     private TokenInfo tokenInfo;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public String getGoogleUserId() {
         return googleUserId;

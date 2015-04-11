@@ -13,6 +13,8 @@ public class Config {
     private String googleAPIKey;
     @Value("${googleClientId}")
     private String googleClientId;
+    @Value("${tempFileDir}")
+    private String tempFileDir;
 
     public String getBusinessRegisterURL() {
         return businessRegisterURL;
@@ -24,5 +26,9 @@ public class Config {
 
     public String getGoogleClientId() {
         return googleClientId;
+    }
+
+    public String getTempFileDir() {
+        return tempFileDir;
     }
 }

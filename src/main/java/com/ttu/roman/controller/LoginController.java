@@ -1,6 +1,8 @@
 package com.ttu.roman.controller;
 
+import com.ttu.roman.controller.response.UserResponse;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,14 +17,8 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public
     @ResponseBody
-    String parseResult(@RequestParam(value="authToken") String accessToken) throws IOException {
-        return "";
-    }
-
-    @RequestMapping(value = "/brah", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public
-    @ResponseBody
-    String nigga() throws IOException {
-        return "";
+    UserResponse parseResult(@RequestParam(value="authToken") String accessToken) throws IOException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new UserResponse(user.getGoogleUserId(), user.getDisplayName());
     }
 }
