@@ -1,4 +1,4 @@
-package com.ttu.roman.controller;
+package com.ttu.roman.auth;
 
 import java.util.Date;
 

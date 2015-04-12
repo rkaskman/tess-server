@@ -1,4 +1,4 @@
-package com.ttu.roman.ocrservice;
+package com.ttu.roman;
 
 import org.springframework.context.ApplicationContext;
 

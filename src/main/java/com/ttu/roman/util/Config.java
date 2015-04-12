@@ -15,6 +15,12 @@ public class Config {
     private String googleClientId;
     @Value("${tempFileDir}")
     private String tempFileDir;
+    @Value("${processedImagesBatchSize}")
+    private String processedImagesBatchSize;
+    @Value("${companyNameCacheMaxSize}")
+    private String companyNameCacheMaxSize;
+    @Value("${companyNameCacheExpiryHours}")
+    private String companyNameCacheExpiryHours;
 
     public String getBusinessRegisterURL() {
         return businessRegisterURL;
@@ -30,5 +36,17 @@ public class Config {
 
     public String getTempFileDir() {
         return tempFileDir;
+    }
+
+    public int getProcessedImagesBatchSize() {
+        return Integer.parseInt(processedImagesBatchSize);
+    }
+
+    public int getCompanyNameCacheMaxSize() {
+        return Integer.parseInt(companyNameCacheMaxSize);
+    }
+
+    public int getCompanyNameCacheExpiryHours() {
+        return Integer.parseInt(companyNameCacheExpiryHours);
     }
 }

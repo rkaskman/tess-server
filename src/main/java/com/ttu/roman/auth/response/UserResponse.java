@@ -1,4 +1,4 @@
-package com.ttu.roman.controller.response;
+package com.ttu.roman.auth.response;
 
 public class UserResponse {
     public String userId;

@@ -1,4 +1,4 @@
-package com.ttu.roman.controller;
+package com.ttu.roman.auth;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;

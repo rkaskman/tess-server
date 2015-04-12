@@ -1,5 +1,6 @@
-package com.ttu.roman.ocrservice;
+package com.ttu.roman;
 
+import com.ttu.roman.ocrservice.ImageProcessingExecutor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,5 +21,8 @@ public class Application {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(Application.class, args);
         ApplicationContextReference.setApplicationContext(applicationContext);
+
+        ImageProcessingExecutor imageProcessingExecutor = applicationContext.getBeanFactory().getBean(ImageProcessingExecutor.class);
+        imageProcessingExecutor.start();
     }
 }

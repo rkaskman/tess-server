@@ -3,5 +3,9 @@
              version="1.0">
     <persistence-unit name="userPersistenceUnit" transaction-type="RESOURCE_LOCAL" >
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+
+        </properties>
     </persistence-unit>
 </persistence>

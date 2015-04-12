@@ -1,4 +1,4 @@
-package com.ttu.roman.controller;
+package com.ttu.roman.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

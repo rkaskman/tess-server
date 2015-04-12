@@ -1,4 +1,6 @@
-package com.ttu.roman.controller;
+package com.ttu.roman.auth;
+
+import com.ttu.roman.auth.TokenInfo;
 
 public class User {
     private String googleUserId;

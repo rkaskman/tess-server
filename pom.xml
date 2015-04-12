@@ -131,7 +131,7 @@
     </dependencies>
 
     <properties>
-        <start-class>com.ttu.roman.ocrservice.Application</start-class>
+        <start-class>com.ttu.roman.Application</start-class>
     </properties>
 
     <build>

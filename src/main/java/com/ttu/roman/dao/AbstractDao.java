@@ -29,6 +29,7 @@ public abstract class AbstractDao<T> {
         em.merge(entity);
     }
 
+    @Transactional
     public void delete(final T entity) {
         try {
             em.remove(em.merge(entity));

@@ -1,6 +1,7 @@
 package com.ttu.roman.controller;
 
-import com.ttu.roman.controller.response.UserResponse;
+import com.ttu.roman.auth.User;
+import com.ttu.roman.auth.response.UserResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
