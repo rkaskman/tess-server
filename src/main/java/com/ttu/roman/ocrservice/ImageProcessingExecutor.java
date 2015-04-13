@@ -40,6 +40,10 @@ public class ImageProcessingExecutor extends Thread {
                     process(imagesToProcess);
                 } catch (Exception e) {
                     LOG.error("Exception occurred", e);
+                } finally {
+                    for (ReceiptImageWrapper imagesToProces : imagesToProcess) {
+                        receiptImageWrapperDAO.delete(imagesToProces);
+                    }
                 }
             } else {
                 try {
@@ -62,7 +66,6 @@ public class ImageProcessingExecutor extends Thread {
                 }
             });
         }
-
         List<Future<Void>> processResults = executorService.invokeAll(processingTask, EXECUTOR_TIMEOUT, TimeUnit.SECONDS);
         for (Future<Void> processResult : processResults) {
             processResult.get();

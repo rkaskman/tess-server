@@ -42,7 +42,6 @@ public class ImagesProcessingComponent {
                 handleInvalidOCRResult(imageToProcess, e);
             }
         }
-        receiptImageWrapperDAO.delete(imageToProcess);
     }
 
     private void handleInvalidOCRResult(ReceiptImageWrapper imageToProcess, InvalidOCRResultException e) {
@@ -56,6 +55,7 @@ public class ImagesProcessingComponent {
                 imageToProcess.getTotalCostPictureExtension());
 
         Tesseract1 tesseract = new Tesseract1();
+        tesseract.setTessVariable("tessedit_char_whitelist", "0123456789.");
         String regNumberString;
         String totalCostString;
 

@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "processed_image_result", schema = "public")
-public class ProcessedImageResult {
+public class Expense {
     public static final String STATE_INITIAL = "I";
     public static final String STATE_ACCEPTED = "A";
 
