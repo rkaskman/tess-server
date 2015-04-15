@@ -21,6 +21,8 @@ public class Config {
     private String companyNameCacheMaxSize;
     @Value("${companyNameCacheExpiryHours}")
     private String companyNameCacheExpiryHours;
+    @Value("${maxExpensesResultAtOnce}")
+    private String maxExpensesResultAtOnce;
 
     public String getBusinessRegisterURL() {
         return businessRegisterURL;
@@ -48,5 +50,9 @@ public class Config {
 
     public int getCompanyNameCacheExpiryHours() {
         return Integer.parseInt(companyNameCacheExpiryHours);
+    }
+
+    public int getMaxExpensesResultAtOnce() {
+        return Integer.parseInt(maxExpensesResultAtOnce);
     }
 }
