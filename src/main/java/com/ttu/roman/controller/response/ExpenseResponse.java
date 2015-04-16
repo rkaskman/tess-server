@@ -6,5 +6,5 @@ public class ExpenseResponse {
     public long id;
     public String companyName;
     public String sum;
-    public Date date;
+    public String date;
 }

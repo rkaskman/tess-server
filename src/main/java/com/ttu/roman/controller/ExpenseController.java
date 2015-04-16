@@ -15,29 +15,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Controller("/expense")
+@Controller
+@RequestMapping("/expense")
 public class ExpenseController {
 
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     @Autowired
     ExpenseDAO expenseDAO;
 
-    @RequestMapping(value = "/forUserAndPeriod", method = RequestMethod.GET, consumes = "application/json;")
+    @RequestMapping(value = "/forUserAndPeriod", method = RequestMethod.POST, consumes = "application/json;")
     @ResponseBody
     public Collection<ExpenseResponse> findExpensesForPeriod(@RequestBody ExpenseRequest expenseRequest) {
         List<Expense> userExpensesForPeriod = expenseDAO.getUserExpensesForPeriod(expenseRequest);
-        return Collections2.transform(userExpensesForPeriod, new Function<Expense, ExpenseResponse>() {
+        return Collections2.transform(userExpensesForPeriod, toExpenseResponse());
+    }
+
+
+    private static Function<Expense, ExpenseResponse> toExpenseResponse() {
+        return new Function<Expense, ExpenseResponse>() {
             @Nullable
             @Override
             public ExpenseResponse apply(Expense expense) {
                 ExpenseResponse response = new ExpenseResponse();
                 response.id = expense.getId();
                 response.companyName = expense.getCompanyName();
-                response.date = new Date(expense.getInsertedAt().getTime());
+
+                response.date = SIMPLE_DATE_FORMAT.format(new Date(expense.getInsertedAt().getTime()));
                 response.sum = expense.getTotalCost().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
                 return response;
             }
-        });
+        };
     }
 }
