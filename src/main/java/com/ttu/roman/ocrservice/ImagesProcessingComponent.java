@@ -39,14 +39,14 @@ public class ImagesProcessingComponent {
                 new OCRResultParser().validateAndFormat(ocrResultHolder);
                 String companyName = companyRetrievingService.retrieveCompanyName(ocrResultHolder.regNumber);
                 ocrResultHandler.sendValidNotification(imageToProcess, ocrResultHolder, companyName);
-            } catch (InvalidOCRResultException e) {
-                handleInvalidOCRResult(ocrResultHolder,  e);
+            } catch (InvalidOCRResultException | ExecutionException e) {
+                handleInvalidOCRResult(ocrResultHolder,  e, imageToProcess.getRegistrationId());
             }
         }
     }
 
-    private void handleInvalidOCRResult(OcrResultHolder ocrResultHolder, InvalidOCRResultException e) {
-        ocrResultHandler.sendErrorNotification(ocrResultHolder, e.getMessage());
+    private void handleInvalidOCRResult(OcrResultHolder ocrResultHolder, Exception e, String regId) throws IOException {
+        ocrResultHandler.sendErrorNotification(ocrResultHolder, e.getMessage(), regId);
     }
 
     private OcrResultHolder doOcr(ReceiptImageWrapper imageToProcess) throws IOException {

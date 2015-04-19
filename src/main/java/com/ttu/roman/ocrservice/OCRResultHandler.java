@@ -58,7 +58,7 @@ public class OCRResultHandler {
         return result;
     }
 
-    public void sendErrorNotification(OcrResultHolder ocrResultHolder,  String message) throws IOException {
-        gcmNotificationSender.sendErroneousNotification(ocrResultHolder,  message);
+    public void sendErrorNotification(OcrResultHolder ocrResultHolder, String message, String regId) throws IOException {
+        gcmNotificationSender.sendErroneousNotification(ocrResultHolder,  message, regId);
     }
 }

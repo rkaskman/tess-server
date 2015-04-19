@@ -33,7 +33,13 @@ public class OcrServiceController {
     public
     @ResponseBody
     String postImage(@RequestBody ImagesWrapper imagesWrapper) throws IOException, RecognitionException {
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReceiptImageWrapper receiptImageWrapper = createReceiptImageWrapper(imagesWrapper);
+        receiptImageWrapperDAO.create(receiptImageWrapper);
+        return "";
+    }
+
+    private ReceiptImageWrapper createReceiptImageWrapper(ImagesWrapper imagesWrapper) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ReceiptImageWrapper receiptImageWrapper = new ReceiptImageWrapper();
 
         receiptImageWrapper.setRegNumberPicture(imagesWrapper.regNumberImage.encodedImage);
@@ -41,12 +47,9 @@ public class OcrServiceController {
         receiptImageWrapper.setTotalCostPicture(imagesWrapper.totalCostImage.encodedImage);
         receiptImageWrapper.setTotalCostPictureExtension(imagesWrapper.totalCostImage.fileExtension);
         receiptImageWrapper.setUserId(user.getGoogleUserId());
-        //TODO: add real value after cloud messaging is introduced
-        receiptImageWrapper.setRegistrationId("123");
+        receiptImageWrapper.setRegistrationId(imagesWrapper.registrationId);
         receiptImageWrapper.setInsertedAt(new Timestamp(new Date().getTime()));
         receiptImageWrapper.setState(ReceiptImageWrapper.STATE_NON_PROCESSED);
-        receiptImageWrapperDAO.create(receiptImageWrapper);
-
-        return "";
+        return receiptImageWrapper;
     }
 }

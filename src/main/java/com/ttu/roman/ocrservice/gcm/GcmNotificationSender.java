@@ -20,12 +20,14 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Component
 public class GcmNotificationSender {
 
     private static Logger LOG = Logger.getLogger(GcmNotificationSender.class);
@@ -48,7 +50,7 @@ public class GcmNotificationSender {
 
     private void initGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(TokenInfo.class, new SuccessfulMessageAdapter())
+        gsonBuilder.registerTypeAdapter(Expense.class, new SuccessfulMessageAdapter())
                 .registerTypeAdapter(Response.class, new ResponseAdapter())
                 .registerTypeAdapter(ErroneousResponseWrapper.class, new ErrorMessageTypeAdapter());
 
@@ -66,7 +68,8 @@ public class GcmNotificationSender {
     public Response sendSuccessfulMessageToCloud(Expense expense) throws IOException, URISyntaxException {
         HttpPost httpPost = createCloudPostRequest();
 
-        StringEntity entity = new StringEntity(gson.toJson(expense), ContentType.APPLICATION_JSON);
+        String string = gson.toJson(expense);
+        StringEntity entity = new StringEntity(string, ContentType.APPLICATION_JSON);
         httpPost.setEntity(entity);
 
         CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -89,7 +92,7 @@ public class GcmNotificationSender {
     private HttpPost createCloudPostRequest() {
         HttpPost httpPost = new HttpPost(cloudServiceURI);
         httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
-        httpPost.setHeader("Authorization:key", config.getGoogleAPIKey());
+        httpPost.setHeader("Authorization", "key=" +config.getGoogleAPIKey());
         return httpPost;
     }
 
@@ -97,11 +100,12 @@ public class GcmNotificationSender {
         httpClient = HttpClients.createDefault();
     }
 
-    public Response sendErroneousNotification(ImagesProcessingComponent.OcrResultHolder ocrResultHolder, String message) throws IOException {
+    public Response sendErroneousNotification(ImagesProcessingComponent.OcrResultHolder ocrResultHolder, String message, String regId) throws IOException {
         HttpPost httpPost = createCloudPostRequest();
-        ErroneousResponseWrapper erroneousResponseWrapper = new ErroneousResponseWrapper(ocrResultHolder, message);
+        ErroneousResponseWrapper erroneousResponseWrapper = new ErroneousResponseWrapper(ocrResultHolder, message, regId);
 
-        StringEntity entity = new StringEntity(gson.toJson(erroneousResponseWrapper), ContentType.APPLICATION_JSON);
+        String string = gson.toJson(erroneousResponseWrapper);
+        StringEntity entity = new StringEntity(string, ContentType.APPLICATION_JSON);
         httpPost.setEntity(entity);
 
         CloseableHttpResponse response = httpClient.execute(httpPost);
@@ -115,9 +119,17 @@ public class GcmNotificationSender {
             String message = erroneousResponseWrapper.message;
 
             out.beginObject();
+
+            out.name("data").beginObject();
             out.name("recognizedRegNr").value(ocrResultHolder.getRegNumber());
             out.name("recognizedTotalCost").value(ocrResultHolder.getRegNumber());
             out.name("message").value(message);
+            out.endObject();
+
+            out.name("registration_ids").beginArray();
+            out.value(erroneousResponseWrapper.regId);
+            out.endArray();
+
             out.endObject();
         }
 
@@ -171,8 +183,6 @@ public class GcmNotificationSender {
                         in.endObject();
                         in.endArray();
 
-                    default:
-                        in.nextString();
                 }
             }
             in.endObject();
@@ -243,10 +253,12 @@ public class GcmNotificationSender {
     private class ErroneousResponseWrapper {
         private ImagesProcessingComponent.OcrResultHolder ocrResultHolder;
         private String message;
+        private String regId;
 
-        public ErroneousResponseWrapper(ImagesProcessingComponent.OcrResultHolder ocrResultHolder, String message) {
+        public ErroneousResponseWrapper(ImagesProcessingComponent.OcrResultHolder ocrResultHolder, String message, String regId) {
             this.ocrResultHolder = ocrResultHolder;
             this.message = message;
+            this.regId = regId;
         }
     }
 }
