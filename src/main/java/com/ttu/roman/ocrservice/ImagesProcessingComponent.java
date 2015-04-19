@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
@@ -31,7 +32,7 @@ public class ImagesProcessingComponent {
     @Autowired
     OCRResultHandler ocrResultHandler;
 
-    public void process(ReceiptImageWrapper imageToProcess) throws IOException, ExecutionException {
+    public void process(ReceiptImageWrapper imageToProcess) throws IOException, ExecutionException, URISyntaxException {
         OcrResultHolder ocrResultHolder = doOcr(imageToProcess);
         if (ocrResultHolder != null) {
             try {
@@ -39,13 +40,13 @@ public class ImagesProcessingComponent {
                 String companyName = companyRetrievingService.retrieveCompanyName(ocrResultHolder.regNumber);
                 ocrResultHandler.sendValidNotification(imageToProcess, ocrResultHolder, companyName);
             } catch (InvalidOCRResultException e) {
-                handleInvalidOCRResult(imageToProcess, e);
+                handleInvalidOCRResult(ocrResultHolder,  e);
             }
         }
     }
 
-    private void handleInvalidOCRResult(ReceiptImageWrapper imageToProcess, InvalidOCRResultException e) {
-        ocrResultHandler.sendErrorNotification(imageToProcess, e.getMessage());
+    private void handleInvalidOCRResult(OcrResultHolder ocrResultHolder, InvalidOCRResultException e) {
+        ocrResultHandler.sendErrorNotification(ocrResultHolder, e.getMessage());
     }
 
     private OcrResultHolder doOcr(ReceiptImageWrapper imageToProcess) throws IOException {
@@ -87,11 +88,11 @@ public class ImagesProcessingComponent {
         return imageFile;
     }
 
-    static class OcrResultHolder {
+   public static class OcrResultHolder {
         private String regNumber;
         private String totalCost;
 
-        String getRegNumber() {
+        public String getRegNumber() {
             return regNumber;
         }
 
@@ -99,7 +100,7 @@ public class ImagesProcessingComponent {
             this.regNumber = regNumber;
         }
 
-        String getTotalCost() {
+        public String getTotalCost() {
             return totalCost;
         }
 

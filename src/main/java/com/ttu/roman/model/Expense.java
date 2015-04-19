@@ -11,6 +11,7 @@ import java.util.Date;
 @Table(name = "processed_image_result", schema = "public")
 public class Expense {
     public static final String STATE_INITIAL = "I";
+    public static final String STATE_PROCESSED = "P";
     public static final String STATE_ACCEPTED = "A";
 
     @Id
@@ -39,6 +40,15 @@ public class Expense {
 
     @Column(name = "inserted_at")
     private Timestamp insertedAt;
+
+    @Column(name = "currency")
+    private String currency;
+
+    @Column(name = "error")
+    private String error;
+
+    @Column(name = "message_id")
+    private String messageId;
 
     public Long getId() {
         return id;
@@ -102,5 +112,29 @@ public class Expense {
 
     public void setInsertedAt(Timestamp insertedAt) {
         this.insertedAt = insertedAt;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 }
