@@ -6,6 +6,11 @@ import com.ttu.roman.util.Config;
 import net.sourceforge.tess4j.Tesseract1;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.log4j.Logger;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
 import org.postgresql.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,13 +55,12 @@ public class ImagesProcessingComponent {
     }
 
     private OcrResultHolder doOcr(ReceiptImageWrapper imageToProcess) throws IOException {
-        File regNumberFile = readIntoFile(imageToProcess.getRegNumberPicture(),
+        File regNumberFile = readAndPreprocess(imageToProcess.getRegNumberPicture(),
                 imageToProcess.getRegNumberPictureExtension());
-        File totalCostFile = readIntoFile(imageToProcess.getTotalCostPicture(),
+        File totalCostFile = readAndPreprocess(imageToProcess.getTotalCostPicture(),
                 imageToProcess.getTotalCostPictureExtension());
 
         Tesseract1 tesseract = new Tesseract1();
-        tesseract.setTessVariable("tessedit_char_whitelist", "0123456789.");
         String regNumberString;
         String totalCostString;
 
@@ -76,6 +80,24 @@ public class ImagesProcessingComponent {
                 totalCostFile.delete();
             }
         }
+    }
+
+    private File readAndPreprocess(String image, String imageExtension) throws IOException {
+        File imageFile = readIntoFile(image,
+                imageExtension);
+
+        Mat source = Highgui.imread(imageFile.getAbsolutePath(),
+                Highgui.CV_LOAD_IMAGE_COLOR);
+
+        Mat sharpenedDestination = new Mat(source.rows(),source.cols(),source.type());
+        Imgproc.GaussianBlur(source, sharpenedDestination, new Size(0, 0), 3);
+        Core.addWeighted(source, 1.5, sharpenedDestination, -0.5, 0, sharpenedDestination);
+
+        File resultImageFile = Files.createTempFile(Paths.get(config.getTempFileDir()), null,
+                "." + imageExtension).toFile();
+        Highgui.imwrite(resultImageFile.getAbsolutePath(), sharpenedDestination);
+
+        return resultImageFile;
     }
 
     private File readIntoFile(String encodedImageData, String imageExtension) throws IOException {

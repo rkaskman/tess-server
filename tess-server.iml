@@ -131,5 +131,16 @@
     <orderEntry type="library" name="Maven: jai-lib:jai:1.1" level="project" />
     <orderEntry type="library" name="Maven: jna-lib:jna:1.0" level="project" />
     <orderEntry type="library" name="Maven: tess4j-lib:tess4j:1.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/opencv/opencv-249.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/opencv/opencv-249.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
