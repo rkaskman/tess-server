@@ -122,7 +122,7 @@ public class GcmNotificationSender {
 
             out.name("data").beginObject();
             out.name("recognizedRegNr").value(ocrResultHolder.getRegNumber());
-            out.name("recognizedTotalCost").value(ocrResultHolder.getRegNumber());
+            out.name("recognizedTotalCost").value(ocrResultHolder.getTotalCost());
             out.name("message").value(message);
             out.endObject();
 
