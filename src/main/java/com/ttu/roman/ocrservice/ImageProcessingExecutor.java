@@ -41,8 +41,8 @@ public class ImageProcessingExecutor extends Thread {
                 } catch (Exception e) {
                     LOG.error("Exception occurred", e);
                 } finally {
-                    for (ReceiptImageWrapper imagesToProces : imagesToProcess) {
-                        receiptImageWrapperDAO.delete(imagesToProces);
+                    for (ReceiptImageWrapper image : imagesToProcess) {
+                        receiptImageWrapperDAO.delete(image);
                     }
                 }
             } else {

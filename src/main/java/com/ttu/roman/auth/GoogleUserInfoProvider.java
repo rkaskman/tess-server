@@ -56,7 +56,7 @@ public class GoogleUserInfoProvider {
     }
 
     private void verifyAudience(String audience) {
-        if(!config.getGoogleClientId().equals(audience)) {
+        if (!config.getGoogleClientId().equals(audience)) {
             throw new InternalAuthenticationServiceException("Invalid target application for token");
         }
     }

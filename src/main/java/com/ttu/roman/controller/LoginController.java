@@ -18,7 +18,7 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public
     @ResponseBody
-    UserResponse parseResult(@RequestParam(value="authToken") String accessToken) throws IOException {
+    UserResponse parseResult(@RequestParam(value = "authToken") String accessToken) throws IOException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new UserResponse(user.getGoogleUserId(), user.getDisplayName());
     }

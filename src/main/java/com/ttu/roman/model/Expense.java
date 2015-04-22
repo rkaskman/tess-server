@@ -13,6 +13,7 @@ public class Expense {
     public static final String STATE_INITIAL = "I";
     public static final String STATE_PROCESSED = "P";
     public static final String STATE_ACCEPTED = "A";
+    public static final String STATE_DECLINED = "D";
 
     @Id
     @SequenceGenerator(name = "processed_image_result_seq", sequenceName = "processed_image_result_seq")

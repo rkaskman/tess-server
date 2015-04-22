@@ -92,7 +92,7 @@ public class GcmNotificationSender {
     private HttpPost createCloudPostRequest() {
         HttpPost httpPost = new HttpPost(cloudServiceURI);
         httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
-        httpPost.setHeader("Authorization", "key=" +config.getGoogleAPIKey());
+        httpPost.setHeader("Authorization", "key=" + config.getGoogleAPIKey());
         return httpPost;
     }
 
@@ -109,7 +109,7 @@ public class GcmNotificationSender {
         httpPost.setEntity(entity);
 
         CloseableHttpResponse response = httpClient.execute(httpPost);
-        return handleCloudHttpResponseOnSentMessage( response);
+        return handleCloudHttpResponseOnSentMessage(response);
     }
 
     private class ErrorMessageTypeAdapter extends TypeAdapter<ErroneousResponseWrapper> {

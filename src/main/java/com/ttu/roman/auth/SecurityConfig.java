@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 and().
                 anonymous().disable().
                 exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint())
-        .and().addFilterBefore(new AuthenticationFilter(authenticationManager()), AnonymousAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthenticationFilter(authenticationManager()), AnonymousAuthenticationFilter.class);
     }
 
     @Override

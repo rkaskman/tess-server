@@ -45,7 +45,7 @@ public class ImagesProcessingComponent {
                 String companyName = companyRetrievingService.retrieveCompanyName(ocrResultHolder.regNumber);
                 ocrResultHandler.sendValidNotification(imageToProcess, ocrResultHolder, companyName);
             } catch (InvalidOCRResultException | ExecutionException e) {
-                handleInvalidOCRResult(ocrResultHolder,  e, imageToProcess.getRegistrationId());
+                handleInvalidOCRResult(ocrResultHolder, e, imageToProcess.getRegistrationId());
             }
         }
     }
@@ -89,7 +89,7 @@ public class ImagesProcessingComponent {
         Mat source = Highgui.imread(imageFile.getAbsolutePath(),
                 Highgui.CV_LOAD_IMAGE_COLOR);
 
-        Mat sharpenedDestination = new Mat(source.rows(),source.cols(),source.type());
+        Mat sharpenedDestination = new Mat(source.rows(), source.cols(), source.type());
         Imgproc.GaussianBlur(source, sharpenedDestination, new Size(0, 0), 3);
         Core.addWeighted(source, 1.5, sharpenedDestination, -0.5, 0, sharpenedDestination);
 
@@ -110,7 +110,7 @@ public class ImagesProcessingComponent {
         return imageFile;
     }
 
-   public static class OcrResultHolder {
+    public static class OcrResultHolder {
         private String regNumber;
         private String totalCost;
 

@@ -32,7 +32,7 @@ public class ExpenseDAO extends AbstractDao<Expense> {
                 "and e.insertedAt >= :startDate and e.insertedAt <= :endDate and e.id < :lastId order by e.id desc";
 
         boolean withLastId = expenseRequest.lastId != 0;
-        Query query = em.createQuery(withLastId ? QUERY_WITH_OFFSET : QUERY_NO_OFFSET )
+        Query query = em.createQuery(withLastId ? QUERY_WITH_OFFSET : QUERY_NO_OFFSET)
                 .setParameter("state", Expense.STATE_ACCEPTED)
                 .setParameter("userId", user.getGoogleUserId())
                 .setParameter("startDate", expenseRequest.startDate)

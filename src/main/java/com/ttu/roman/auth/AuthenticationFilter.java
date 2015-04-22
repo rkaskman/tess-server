@@ -66,7 +66,7 @@ public class AuthenticationFilter extends GenericFilterBean {
     }
 
     @SuppressWarnings("unchecked")
-    private static  <T> T cast(Object o) {
+    private static <T> T cast(Object o) {
         return (T) o;
     }
 }
