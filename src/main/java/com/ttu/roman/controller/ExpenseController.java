@@ -24,13 +24,13 @@ public class ExpenseController {
        return expenseService.findExpensesForPeriod(expenseRequest);
     }
 
-    @RequestMapping(value = "/confirm/{recognitionId}", method = RequestMethod.POST, consumes = "application/json;")
+    @RequestMapping(value = "/confirm/{recognitionId}", method = RequestMethod.POST)
     @ResponseBody
     public void confirm(@PathVariable String recognitionId) throws InvalidExpenseException {
         expenseService.updateExpenseState(Long.parseLong(recognitionId), Expense.STATE_ACCEPTED);
     }
 
-    @RequestMapping(value = "/decline/{recognitionId}", method = RequestMethod.POST, consumes = "application/json;")
+    @RequestMapping(value = "/decline/{recognitionId}", method = RequestMethod.POST)
     @ResponseBody
     public void decline(@PathVariable String recognitionId) throws InvalidExpenseException {
         expenseService.updateExpenseState(Long.parseLong(recognitionId), Expense.STATE_DECLINED);
