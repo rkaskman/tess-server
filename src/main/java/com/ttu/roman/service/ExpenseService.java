@@ -64,6 +64,8 @@ public class ExpenseService {
 
                 response.date = SIMPLE_DATE_FORMAT.format(new Date(expense.getInsertedAt().getTime()));
                 response.sum = expense.getTotalCost().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                response.state = expense.getState();
+                response.currency = expense.getCurrency();
                 return response;
             }
         };
