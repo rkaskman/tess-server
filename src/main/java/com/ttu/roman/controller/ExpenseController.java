@@ -27,12 +27,12 @@ public class ExpenseController {
     @RequestMapping(value = "/confirm/{recognitionId}", method = RequestMethod.POST)
     @ResponseBody
     public void confirm(@PathVariable String recognitionId) throws InvalidExpenseException {
-        expenseService.updateExpenseState(Long.parseLong(recognitionId), Expense.STATE_ACCEPTED);
+        expenseService.confirmExpense(Long.parseLong(recognitionId));
     }
 
     @RequestMapping(value = "/decline/{recognitionId}", method = RequestMethod.POST)
     @ResponseBody
     public void decline(@PathVariable String recognitionId) throws InvalidExpenseException {
-        expenseService.updateExpenseState(Long.parseLong(recognitionId), Expense.STATE_DECLINED);
+        expenseService.deleteExpense(Long.parseLong(recognitionId));
     }
 }
