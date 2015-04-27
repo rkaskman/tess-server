@@ -58,6 +58,11 @@ public class ImagesProcessingComponent {
         File totalCostFile = readAndPreprocess(imageToProcess.getTotalCostPicture(),
                 imageToProcess.getTotalCostPictureExtension());
 
+
+//        Files.copy(regNumberFile.toPath(), new File("f1").toPath());
+//        Files.copy(regNumberFile.toPath(), new File("f2").toPath());
+
+
         Tesseract1 tesseract = new Tesseract1();
         String regNumberString;
         String totalCostString;
@@ -108,7 +113,9 @@ public class ImagesProcessingComponent {
 
         File resultImageFile = Files.createTempFile(Paths.get(config.getTempFileDir()), null,
                 "." + imageExtension).toFile();
+
         Highgui.imwrite(resultImageFile.getAbsolutePath(), source);
+
         imageFile.delete();
 
         return resultImageFile;

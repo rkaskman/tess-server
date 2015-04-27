@@ -4,6 +4,7 @@ import com.ttu.roman.dao.ExpenseDAO;
 import com.ttu.roman.model.Expense;
 import com.ttu.roman.model.ReceiptImageWrapper;
 import com.ttu.roman.ocrservice.gcm.GcmNotificationSender;
+import com.ttu.roman.service.ExpenseService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import static com.ttu.roman.ocrservice.ImagesProcessingComponent.*;
+import static com.ttu.roman.service.ExpenseService.CURRENCY_EUR;
 
 @Component
 public class OCRResultHandler {
 
-    public static final String CURRENCY_EUR = "EUR";
 
     @Autowired
     GcmNotificationSender gcmNotificationSender;
