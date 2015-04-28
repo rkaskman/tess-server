@@ -3,13 +3,13 @@ package com.ttu.roman.controller;
 
 import com.ttu.roman.controller.request.ExpenseInput;
 import com.ttu.roman.controller.response.ExpenseResponseContainer.ExpenseResponse;
+import com.ttu.roman.ocrservice.CompanyNotFoundException;
 import com.ttu.roman.service.ExpenseService;
 import com.ttu.roman.service.exception.InvalidExpenseException;
 import com.ttu.roman.controller.request.ExpenseRequest;
 import com.ttu.roman.controller.response.ExpenseResponseContainer;
-import com.ttu.roman.model.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +40,16 @@ public class ExpenseController {
     }
 
     @RequestMapping(value = "/submitManually", method = RequestMethod.POST, consumes = "application/json;")
+
     @ResponseBody
-    public ExpenseResponse submitManually(@RequestBody ExpenseInput expenseInput) throws InvalidExpenseException {
+    public ExpenseResponse submitManually(@RequestBody ExpenseInput expenseInput) throws CompanyNotFoundException {
         return expenseService.saveInitialExpense(expenseInput);
     }
 
+
+    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Not found")
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public String exceptionHandler(CompanyNotFoundException e) {
+        return e.getMessage();
+    }
 }

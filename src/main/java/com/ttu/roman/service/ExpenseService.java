@@ -8,6 +8,7 @@ import com.ttu.roman.controller.request.ExpenseRequest;
 import com.ttu.roman.controller.response.ExpenseResponseContainer;
 import com.ttu.roman.controller.response.ExpenseResponseContainer.ExpenseResponse;
 import com.ttu.roman.model.ReceiptImageWrapper;
+import com.ttu.roman.ocrservice.CompanyNotFoundException;
 import com.ttu.roman.ocrservice.CompanyRetrievingService;
 import com.ttu.roman.ocrservice.ImagesProcessingComponent;
 import com.ttu.roman.service.exception.InvalidExpenseException;
@@ -61,10 +62,6 @@ public class ExpenseService {
         expenseValidator.validateStateInitial(expense);
     }
 
-    private void submitExpense(Expense expense) {
-
-    }
-
     public ExpenseResponseContainer findExpensesForPeriod(ExpenseRequest expenseRequest) {
         List<Expense> userExpensesForPeriod = expenseDAO.getUserExpensesForPeriod(expenseRequest);
 
@@ -86,6 +83,7 @@ public class ExpenseService {
 
                 response.date = SIMPLE_DATE_FORMAT.format(new Date(expense.getInsertedAt().getTime()));
                 response.sum = expense.getTotalCost().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                response.regNumber = expense.getCompanyRegNumber();
                 response.state = expense.getState();
                 response.currency = expense.getCurrency();
                 return response;
@@ -93,8 +91,9 @@ public class ExpenseService {
         };
     }
 
-    private Expense createExpenseFrom(ExpenseInput expenseInput) throws InvalidExpenseException {
+    private Expense createExpenseFrom(ExpenseInput expenseInput) throws CompanyNotFoundException {
         User user = Util.getAuthenticatedUser();
+
         Expense expense = new Expense();
         expense.setUserId(user.getGoogleUserId());
         expense.setCompanyRegNumber(expenseInput.regNumber);
@@ -104,7 +103,7 @@ public class ExpenseService {
         try {
             companyName = companyRetrievingService.retrieveCompanyName(expenseInput.regNumber);
         } catch (Exception e) {
-            throw new InvalidExpenseException("companyRetievalError");
+            throw new CompanyNotFoundException("companyRetrievalError");
         }
         expense.setCompanyName(companyName);
 
@@ -114,7 +113,7 @@ public class ExpenseService {
         return expense;
     }
 
-    public ExpenseResponse saveInitialExpense(ExpenseInput expenseInput) throws InvalidExpenseException {
+    public ExpenseResponse saveInitialExpense(ExpenseInput expenseInput) throws CompanyNotFoundException {
         Expense expense = createExpenseFrom(expenseInput);
         expenseDAO.create(expense);
         return toExpenseResponse().apply(expense);

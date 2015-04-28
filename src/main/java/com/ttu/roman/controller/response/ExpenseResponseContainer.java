@@ -10,6 +10,7 @@ public class ExpenseResponseContainer {
         public long id;
         public String companyName;
         public String sum;
+        public String regNumber;
         public String date;
         public String state;
         public String currency;
