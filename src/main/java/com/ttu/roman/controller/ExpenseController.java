@@ -40,7 +40,6 @@ public class ExpenseController {
     }
 
     @RequestMapping(value = "/submitManually", method = RequestMethod.POST, consumes = "application/json;")
-
     @ResponseBody
     public ExpenseResponse submitManually(@RequestBody ExpenseInput expenseInput) throws CompanyNotFoundException {
         return expenseService.saveInitialExpense(expenseInput);

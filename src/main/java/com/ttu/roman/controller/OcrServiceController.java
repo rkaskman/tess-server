@@ -42,10 +42,8 @@ public class OcrServiceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ReceiptImageWrapper receiptImageWrapper = new ReceiptImageWrapper();
 
-        receiptImageWrapper.setRegNumberPicture(imagesWrapper.regNumberImage.encodedImage);
-        receiptImageWrapper.setRegNumberPictureExtension(imagesWrapper.regNumberImage.fileExtension);
-        receiptImageWrapper.setTotalCostPicture(imagesWrapper.totalCostImage.encodedImage);
-        receiptImageWrapper.setTotalCostPictureExtension(imagesWrapper.totalCostImage.fileExtension);
+        receiptImageWrapper.setRegNumberPicture(imagesWrapper.receiptImage.encodedImage);
+        receiptImageWrapper.setRegNumberPictureExtension(imagesWrapper.receiptImage.fileExtension);
         receiptImageWrapper.setUserId(user.getGoogleUserId());
         receiptImageWrapper.setRegistrationId(imagesWrapper.registrationId);
         receiptImageWrapper.setInsertedAt(new Timestamp(new Date().getTime()));

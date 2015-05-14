@@ -27,7 +27,7 @@ public class ImageProcessingExecutor extends Thread {
 
     public ImageProcessingExecutor() {
         super();
-        int poolSize = (int) (Runtime.getRuntime().availableProcessors() / COMPUTATION_INTENSIVE_TASK_COEFFICIENT);
+        int poolSize = Runtime.getRuntime().availableProcessors()  + 1;
         executorService = Executors.newFixedThreadPool(poolSize);
     }
 
