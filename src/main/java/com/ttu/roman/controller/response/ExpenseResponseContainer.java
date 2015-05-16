@@ -1,9 +1,11 @@
 package com.ttu.roman.controller.response;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 public class ExpenseResponseContainer {
     public Collection<ExpenseResponse> expenseList;
+    public BigDecimal totalSum;
     public boolean lastReached;
 
     public static class ExpenseResponse {

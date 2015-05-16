@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -26,14 +27,14 @@ public class ExpenseDAO extends AbstractDao<Expense> {
     public List<Expense> getUserExpensesForPeriod(ExpenseRequest expenseRequest) {
         User user = Util.getAuthenticatedUser();
 
-        String QUERY_NO_OFFSET = "from Expense e where e.userId = :userId " +
+        String queryNoOffset = "from Expense e where e.userId = :userId " +
                 "and e.insertedAt >= :startDate and e.insertedAt <= :endDate order by e.id desc";
 
-        String QUERY_WITH_OFFSET = "from Expense e where e.userId = :userId " +
+        String queryWithOffset = "from Expense e where e.userId = :userId " +
                 "and e.insertedAt >= :startDate and e.insertedAt <= :endDate and e.id < :lastId order by e.id desc";
 
         boolean withLastId = expenseRequest.lastId != 0;
-        Query query = em.createQuery(withLastId ? QUERY_WITH_OFFSET : QUERY_NO_OFFSET)
+        Query query = em.createQuery(withLastId ? queryWithOffset : queryNoOffset)
 //                .setParameter("state", Expense.STATE_ACCEPTED)
                 .setParameter("userId", user.getGoogleUserId())
                 .setParameter("startDate", expenseRequest.startDate)
@@ -46,5 +47,15 @@ public class ExpenseDAO extends AbstractDao<Expense> {
         query.setMaxResults(config.getMaxExpensesResultAtOnce());
 
         return query.getResultList();
+    }
+
+    public BigDecimal getTotalSumForPeriod(ExpenseRequest expenseRequest) {
+        User user = Util.getAuthenticatedUser();
+        return em.createQuery("select sum(e.totalCost) from Expense e where e.userId = :userId " +
+                "and e.insertedAt >= :startDate and e.insertedAt <= :endDate", BigDecimal.class)
+                .setParameter("userId", user.getGoogleUserId())
+                .setParameter("startDate", expenseRequest.startDate)
+                .setParameter("endDate", expenseRequest.endDate).getSingleResult();
+
     }
 }

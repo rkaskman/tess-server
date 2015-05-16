@@ -7,10 +7,8 @@ import com.ttu.roman.controller.request.ExpenseInput;
 import com.ttu.roman.controller.request.ExpenseRequest;
 import com.ttu.roman.controller.response.ExpenseResponseContainer;
 import com.ttu.roman.controller.response.ExpenseResponseContainer.ExpenseResponse;
-import com.ttu.roman.model.ReceiptImageWrapper;
 import com.ttu.roman.ocrservice.CompanyNotFoundException;
 import com.ttu.roman.ocrservice.CompanyRetrievingService;
-import com.ttu.roman.ocrservice.ImagesProcessingComponent;
 import com.ttu.roman.service.exception.InvalidExpenseException;
 import com.ttu.roman.dao.ExpenseDAO;
 import com.ttu.roman.model.Expense;
@@ -68,8 +66,15 @@ public class ExpenseService {
         ExpenseResponseContainer expenseResponseContainer = new ExpenseResponseContainer();
         expenseResponseContainer.expenseList = Collections2.transform(userExpensesForPeriod, toExpenseResponse());
         expenseResponseContainer.lastReached = userExpensesForPeriod.size() < config.getMaxExpensesResultAtOnce();
+        if(!userExpensesForPeriod.isEmpty()) {
+            expenseResponseContainer.totalSum = getTotalSumForPeriod(expenseRequest);
+        }
 
         return expenseResponseContainer;
+    }
+
+    private BigDecimal getTotalSumForPeriod(ExpenseRequest expenseRequest) {
+        return expenseRequest.lastId == 0 ? expenseDAO.getTotalSumForPeriod(expenseRequest) : null;
     }
 
     private static Function<Expense, ExpenseResponse> toExpenseResponse() {
