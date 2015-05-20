@@ -82,21 +82,9 @@ public class ImagesProcessingComponent {
         File imageFile = readAndPreprocess(imageToProcess.getRegNumberPicture(),
                 imageToProcess.getRegNumberPictureExtension());
 
-        Tesseract1 tesseract = new Tesseract1();
-        tesseract.setLanguage("eng+est");
-        String ocrString;
-
         try {
-            ocrString = tesseract.doOCR(imageFile);
-            ocrString = ocrString.replaceAll("[\n]+", "\n")
-                    .toLowerCase()
-                    .replaceAll(",", ".")
-                    .replaceAll(":", " ")
-                    .replaceAll("-", ".")
-                    .replaceAll("_", ".")
-                    .replaceAll("( )+", " ")
-                    .replaceAll("[^a-z0-9\\.\\n ]", "");
-
+            String ocrString = performOCR(imageFile);
+            ocrString = formatOCRResult(ocrString);
             ReceiptTextRepresentation receiptTextRepresentation = createReceiptTextRepresentation(ocrString);
             return parseOcrResult(receiptTextRepresentation);
         } catch (TesseractException e) {
@@ -108,6 +96,23 @@ public class ImagesProcessingComponent {
                 imageFile.delete();
             }
         }
+    }
+
+    private String performOCR(File imageFile) throws TesseractException {
+        Tesseract1 tesseract = new Tesseract1();
+        tesseract.setLanguage("eng+est");
+        return tesseract.doOCR(imageFile);
+    }
+
+    private String formatOCRResult(String ocrString) {
+        return ocrString.replaceAll("[\n]+", "\n")
+                .toLowerCase()
+                .replaceAll(",", ".")
+                .replaceAll(":", " ")
+                .replaceAll("-", ".")
+                .replaceAll("_", ".")
+                .replaceAll("( )+", " ")
+                .replaceAll("[^a-z0-9\\.\\n ]", "");
     }
 
     private OcrResultHolder parseOcrResult(ReceiptTextRepresentation receiptTextRepresentation) {
@@ -207,6 +212,8 @@ public class ImagesProcessingComponent {
 
         Mat structuringElement = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(19, 19));
         Mat temporaryMatrix = new Mat();
+
+
 
 
         Imgproc.resize(source, temporaryMatrix, new Size(source.cols() / 4, source.rows() / 4));

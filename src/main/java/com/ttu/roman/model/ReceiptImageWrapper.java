@@ -8,7 +8,6 @@ import java.util.Date;
 @Entity
 @Table(name = "receipt_picture_data")
 public class ReceiptImageWrapper {
-    public static final String STATE_PROCESSED = "P";
     public static final String STATE_NON_PROCESSED = "N";
 
     @Id

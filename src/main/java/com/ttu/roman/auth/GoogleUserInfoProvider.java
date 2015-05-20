@@ -48,7 +48,7 @@ public class GoogleUserInfoProvider {
         gson = gsonBuilder.create();
     }
 
-    public User getUserBy(String token) throws URISyntaxException, IOException {
+    public User authenticateUserWith(String token) throws URISyntaxException, IOException {
         TokenInfo tokenInfo = getTokenInfo(token);
         verifyAudience(tokenInfo.audience);
 

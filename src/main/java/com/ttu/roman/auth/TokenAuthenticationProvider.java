@@ -23,7 +23,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = (String) authentication.getPrincipal();
         try {
-            User user = googleUserInfoProvider.getUserBy(token);
+            User user = googleUserInfoProvider.authenticateUserWith(token);
             return new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList("ROLE_USER"));
         } catch (URISyntaxException | IOException e) {
             throw new InternalAuthenticationServiceException(e.getMessage());

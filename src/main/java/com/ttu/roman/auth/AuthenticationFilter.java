@@ -23,12 +23,13 @@ public class AuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+            throws IOException, ServletException {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
 
         if (authentication == null) {
-            authenticate(request);
+            authenticate (request);
         }
         HttpServletResponse httpResponse = cast(response);
         HttpServletRequest httpRequest = cast(request);

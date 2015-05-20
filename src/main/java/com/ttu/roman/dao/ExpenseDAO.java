@@ -52,10 +52,12 @@ public class ExpenseDAO extends AbstractDao<Expense> {
     public BigDecimal getTotalSumForPeriod(ExpenseRequest expenseRequest) {
         User user = Util.getAuthenticatedUser();
         return em.createQuery("select sum(e.totalCost) from Expense e where e.userId = :userId " +
-                "and e.insertedAt >= :startDate and e.insertedAt <= :endDate", BigDecimal.class)
+                "and e.insertedAt >= :startDate and e.insertedAt <= :endDate and e.state = :state", BigDecimal.class)
                 .setParameter("userId", user.getGoogleUserId())
                 .setParameter("startDate", expenseRequest.startDate)
-                .setParameter("endDate", expenseRequest.endDate).getSingleResult();
+                .setParameter("endDate", expenseRequest.endDate)
+                .setParameter("state", Expense.STATE_ACCEPTED)
+                .getSingleResult();
 
     }
 }
